@@ -13,7 +13,7 @@ export default function MoviesPage() {
   const { searchValue } = useParams();
 
   useEffect(() => {
-    filmsAPI.fetchSearchFilms('lion').then(setSearch);
+    filmsAPI.fetchSearchFilms(searchValue).then(setSearch);
   }, [value]);
 
   console.log(search.results);
