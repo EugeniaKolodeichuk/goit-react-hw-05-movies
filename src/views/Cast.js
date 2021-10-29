@@ -7,7 +7,7 @@ export default function Casts({ actors }) {
 
   return (
     <ul>
-      {actors.cast &&
+      {actors.cast.length ? (
         actors.cast.map(actor => (
           <Fragment key={shortid.generate()}>
             {actor.profile_path ? (
@@ -28,7 +28,10 @@ export default function Casts({ actors }) {
             <li key={actor.id}>{actor.name}</li>
             <li key={shortid.generate()}>{`Character: ${actor.character}`}</li>
           </Fragment>
-        ))}
+        ))
+      ) : (
+        <p>We don't have any information about cast</p>
+      )}
     </ul>
   );
 }

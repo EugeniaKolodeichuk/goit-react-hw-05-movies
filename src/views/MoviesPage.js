@@ -1,22 +1,33 @@
 import * as filmsAPI from '../services/apiService';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useParams } from 'react-router';
+/* import { useParams } from 'react-router'; */
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 
 export default function MoviesPage() {
   const location = useLocation();
+  const history = useHistory();
+  /* console.log(history); */
   const [search, setSearch] = useState([]);
   const [value, setValue] = useState('');
-  const { searchValue } = useParams();
+  /*  const { searchValue } = useParams(); */
+  const query = location.search.split('=');
+  const [searchValue, setSearchValue] = useState(query[1]);
+  /* const [searchValue, setSearchValue] = useState(query[1]); */
 
   useEffect(() => {
-    filmsAPI.fetchSearchFilms(searchValue).then(setSearch);
-  }, [value]);
+    if (!searchValue) {
+      /* toast.error('Please enter search request!'); */
+      return;
+    }
 
-  console.log(search.results);
+    filmsAPI.fetchSearchFilms(searchValue).then(setSearch);
+  }, [searchValue]);
+
+  /* console.log(search.results); */
 
   const changeHandler = e => {
     setValue(e.target.value);
@@ -29,6 +40,8 @@ export default function MoviesPage() {
       toast.error('Please enter search request!');
       return;
     }
+    history.push(`/movies?query=${value}`);
+    setSearchValue(value);
     setValue('');
   };
 

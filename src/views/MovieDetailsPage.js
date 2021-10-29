@@ -1,9 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router';
 import { NavLink, Route, useRouteMatch } from 'react-router-dom';
 import * as filmsAPI from '../services/apiService';
-import Casts from './Cast';
-import Reviews from './Reviews';
+/* import Casts from './Cast';
+import Reviews from './Reviews'; */
+import defaultImage from '../default_photo.png';
+
+const Casts = lazy(() => import('./Cast.js' /*webpackChunkName: "casts"*/));
+const Reviews = lazy(() =>
+  import('./Reviews.js' /*webpackChunkName: "reviews"*/),
+);
 
 export default function MovieDetailsPage() {
   const history = useHistory();
@@ -43,15 +49,18 @@ export default function MovieDetailsPage() {
       {film && (
         <>
           <button type="button" onClick={onGoBack}>
-            Back to films
+            Go back
           </button>
           <hr />
-          {film.poster_path && (
+
+          {film.poster_path ? (
             <img
               width="100px"
               src={`https://image.tmdb.org/t/p/w500${film.poster_path}`}
               alt={film.title}
             />
+          ) : (
+            <img width="100px" src={defaultImage} alt={film.title} />
           )}
           <h2>
             {film.title} ({film.release_date && film.release_date.slice(0, 4)})
@@ -75,12 +84,14 @@ export default function MovieDetailsPage() {
             </li>
           </ul>
           <hr />
-          <Route path="/movies/:movieId/cast">
-            <Casts actors={actors} />
-          </Route>
-          <Route path="/movies/:movieId/reviews">
-            {reviews.results && <Reviews reviews={reviews} />}
-          </Route>
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <Route path="/movies/:movieId/cast">
+              <Casts actors={actors} />
+            </Route>
+            <Route path="/movies/:movieId/reviews">
+              {reviews.results && <Reviews reviews={reviews} />}
+            </Route>
+          </Suspense>
         </>
       )}
     </>
