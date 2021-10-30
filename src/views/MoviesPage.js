@@ -58,6 +58,11 @@ export default function MoviesPage() {
       ></input>
       <button type="submit">Button</button>
       <hr />
+
+      {search.results && !search.results.length && (
+        <h1>{`No results for ${searchValue}`}</h1>
+      )}
+
       {
         <ul>
           {search.results &&

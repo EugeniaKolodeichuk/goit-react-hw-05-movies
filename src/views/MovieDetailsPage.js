@@ -77,10 +77,24 @@ export default function MovieDetailsPage() {
           <ul>
             Additional information
             <li>
-              <NavLink to={`${url}/cast`}>Cast</NavLink>
+              <NavLink
+                to={{
+                  pathname: `${url}/cast`,
+                  state: { from: location.state.from },
+                }}
+              >
+                Cast
+              </NavLink>
             </li>
             <li>
-              <NavLink to={`${url}/reviews`}>Reviews</NavLink>
+              <NavLink
+                to={{
+                  pathname: `${url}/cast`,
+                  state: { from: location.state.from },
+                }}
+              >
+                Reviews
+              </NavLink>
             </li>
           </ul>
           <hr />
