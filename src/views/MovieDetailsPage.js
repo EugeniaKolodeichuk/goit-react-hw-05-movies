@@ -89,7 +89,7 @@ export default function MovieDetailsPage() {
             <li>
               <NavLink
                 to={{
-                  pathname: `${url}/cast`,
+                  pathname: `${url}/reviews`,
                   state: { from: location.state.from },
                 }}
               >
