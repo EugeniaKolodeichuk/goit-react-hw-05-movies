@@ -1,33 +1,29 @@
-import * as filmsAPI from '../services/apiService';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-/* import { useParams } from 'react-router'; */
 import { Link, useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import * as filmsAPI from '../services/apiService';
+import styles from './views.module.css';
 
 export default function MoviesPage() {
   const location = useLocation();
   const history = useHistory();
-  /* console.log(history); */
+
   const [search, setSearch] = useState([]);
   const [value, setValue] = useState('');
-  /*  const { searchValue } = useParams(); */
+
   const query = location.search.split('=');
   const [searchValue, setSearchValue] = useState(query[1]);
-  /* const [searchValue, setSearchValue] = useState(query[1]); */
 
   useEffect(() => {
     if (!searchValue) {
-      /* toast.error('Please enter search request!'); */
       return;
     }
 
     filmsAPI.fetchSearchFilms(searchValue).then(setSearch);
   }, [searchValue]);
-
-  /* console.log(search.results); */
 
   const changeHandler = e => {
     setValue(e.target.value);
@@ -56,7 +52,7 @@ export default function MoviesPage() {
         onChange={changeHandler}
         value={value}
       ></input>
-      <button type="submit">Button</button>
+      <button type="submit">Search</button>
       <hr />
 
       {search.results && !search.results.length && (
@@ -64,11 +60,12 @@ export default function MoviesPage() {
       )}
 
       {
-        <ul>
+        <ul className={styles.list_noorder}>
           {search.results &&
             search.results.map(result => (
               <li key={result.id}>
                 <Link
+                  className={styles.link}
                   to={{
                     pathname: `/movies/${result.id}`,
                     state: { from: location },
@@ -85,55 +82,3 @@ export default function MoviesPage() {
     </form>
   );
 }
-
-/*  useEffect(() => {
-    const final = search.results.filter(result =>
-      result.original_title.toLowerCase().includes(value),
-    );
-    setSearch(final);
-  }, [value]); */
-
-/* const filteredCountries = () => {
-    if (search.results !== 0) {
-      search.results.filter(result => {
-        return result.original_title
-          .toLowerCase()
-          .includes(value.toLowerCase());
-      });
-    } else return;
-  }; */
-
-/* useEffect(() => {
-    filmsAPI.fetchSearchFilms().then(setFilms);
-  }, []);
-  console.log(films.results); */
-
-/* useEffect(
-    prevState => {
-      if (search === '') {
-        return;
-      } else if (prevState !== search && search !== '') {
-        searchImagesHandler();
-      }
-    },
-    // eslint-disable-next-line
-    [search],
-  );
-
-  const searchImagesHandler = async () => {
-    setError('');
-    try {
-      const result = await filmsAPI.fetchSearchFilms(search);
-
-      if (result.total !== 0) {
-        setSearch(prevState => [...prevState, ...result]);
-      } else {
-        toast.info(`Nothing found for ${search}!`);
-        setSearch([]);
-      }
-    } catch (error) {
-      console.error(error);
-      setError(error.toString());
-    } finally {
-    }
-  }; */

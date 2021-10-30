@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import styles from '../Navigation/Navigation.module.css';
 
 const Navigation = () => (
-  <nav>
+  <nav className={styles.navigation}>
     <NavLink
       exact
       to="/"

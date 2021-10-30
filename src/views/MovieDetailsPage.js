@@ -2,9 +2,9 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router';
 import { NavLink, Route, useRouteMatch } from 'react-router-dom';
 import * as filmsAPI from '../services/apiService';
-/* import Casts from './Cast';
-import Reviews from './Reviews'; */
+
 import defaultImage from '../default_photo.png';
+import styles from './views.module.css';
 
 const Casts = lazy(() => import('./Cast.js' /*webpackChunkName: "casts"*/));
 const Reviews = lazy(() =>
@@ -14,7 +14,7 @@ const Reviews = lazy(() =>
 export default function MovieDetailsPage() {
   const history = useHistory();
   const location = useLocation();
-  /* console.log('detailsView:', location); */
+
   const { url } = useRouteMatch();
   const { movieId } = useParams();
   const [film, setFilms] = useState([]);
@@ -25,27 +25,20 @@ export default function MovieDetailsPage() {
     filmsAPI.fetchFilmById(movieId).then(setFilms);
   }, [movieId]);
 
-  /* let filmsAll = films.results; */
-  /* console.log(film); */
-  /* let genres = film.genres; */
-  /* console.log(genres); */
-
   useEffect(() => {
     filmsAPI.fetchCast(movieId).then(setActors);
   }, [movieId]);
-  /* console.log(actors); */
 
   useEffect(() => {
     filmsAPI.fetchRewiew(movieId).then(setReviews);
   }, [movieId]);
-  /* console.log(reviews); */
 
   const onGoBack = () => {
     history.push(location?.state?.from ?? '/');
   };
 
   return (
-    <>
+    <div className={styles.main}>
       {film && (
         <>
           <button type="button" onClick={onGoBack}>
@@ -55,33 +48,38 @@ export default function MovieDetailsPage() {
 
           {film.poster_path ? (
             <img
-              width="100px"
+              width="400px"
               src={`https://image.tmdb.org/t/p/w500${film.poster_path}`}
               alt={film.title}
             />
           ) : (
-            <img width="100px" src={defaultImage} alt={film.title} />
+            <img width="400px" src={defaultImage} alt={film.title} />
           )}
-          <h2>
+          <h1>
             {film.title} ({film.release_date && film.release_date.slice(0, 4)})
-          </h2>
-          <p>User Score: {`${film.vote_average * 10}%`}</p>
-          <h3>Overview</h3>
+          </h1>
+          <h2>User Score: {`${film.vote_average * 10}%`}</h2>
+          <p>
+            <b>Overview</b>
+          </p>
           <p>{film.overview}</p>
-          <h4>Genres</h4>
-          <ul>
-            {film.genres &&
-              film.genres.map(genre => <li key={genre.id}>{genre.name}</li>)}
-          </ul>
+          <p>
+            <b>Genres</b>
+          </p>
+
+          {film.genres &&
+            film.genres.map(genre => <p key={genre.id}>{genre.name}</p>)}
           <hr />
-          <ul>
-            Additional information
+          <ul className={styles.list_noorder}>
+            <b>Additional information</b>
             <li>
               <NavLink
                 to={{
                   pathname: `${url}/cast`,
                   state: { from: location.state.from },
                 }}
+                className={styles.link}
+                activeClassName={styles.activeLink}
               >
                 Cast
               </NavLink>
@@ -92,6 +90,8 @@ export default function MovieDetailsPage() {
                   pathname: `${url}/reviews`,
                   state: { from: location.state.from },
                 }}
+                className={styles.link}
+                activeClassName={styles.activeLink}
               >
                 Reviews
               </NavLink>
@@ -108,6 +108,6 @@ export default function MovieDetailsPage() {
           </Suspense>
         </>
       )}
-    </>
+    </div>
   );
 }

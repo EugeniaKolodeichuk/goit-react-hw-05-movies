@@ -1,5 +1,3 @@
-/* import movieId from '../views/MovieDetailsPage'; */
-
 const BASE_URL = 'https://api.themoviedb.org/3';
 const KEY = 'dc1ac22b6d897f0eb3cf1fd1c0f34665';
 
@@ -33,12 +31,6 @@ export function fetchRewiew(movieId) {
     `${BASE_URL}/movie/${movieId}/reviews?api_key=${KEY}&language=en-US&page=1`,
   );
 }
-
-/* export function fetchSearchFilms() {
-  return fetchWithErrorHandling(
-    `${BASE_URL}/search/movie?api_key=${KEY}&language=en-US&page=1&include_adult=false`,
-  );
-} */
 
 export function fetchSearchFilms(searchValue) {
   return fetchWithErrorHandling(

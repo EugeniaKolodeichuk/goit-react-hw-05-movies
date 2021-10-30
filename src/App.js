@@ -1,10 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router';
 import AppBar from './components/AppBar/AppBar';
-/* import HomePage from './views/HomePage'; */
-/* import MoviesPage from './views/MoviesPage'; */
-/* import NotFoundPage from './views/NotFoundPage';
-import MovieDetailsPage from './views/MovieDetailsPage'; */
+import Container from './components/Container/Container';
 
 const HomePage = lazy(() =>
   import('./views/HomePage.js' /*webpackChunkName: "home-page"*/),
@@ -23,7 +20,7 @@ const MovieDetailsPage = lazy(() =>
 
 export default function App() {
   return (
-    <div>
+    <Container>
       <AppBar />
 
       <Suspense fallback={<h1>Loading...</h1>}>
@@ -45,6 +42,6 @@ export default function App() {
           </Route>
         </Switch>
       </Suspense>
-    </div>
+    </Container>
   );
 }

@@ -1,33 +1,26 @@
-/* import PageHeading from '../PageHeading/PageHeading'; */
 import { useState, useEffect } from 'react';
-import { Link, /* useRouteMatch, */ useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import * as filmsAPI from '../services/apiService';
+import styles from './views.module.css';
 
 export default function HomePage() {
   const location = useLocation();
-  /* console.log('HomePage:', location); */
 
-  /* const { url } = useRouteMatch(); */
   const [films, setFilms] = useState([]);
-
-  /* console.log(url); */
 
   useEffect(() => {
     filmsAPI.fetchPopularFilms().then(setFilms);
   }, []);
-  /* console.log(films.results.id); */
-
-  /* let filmsAll = films.results; */
 
   return (
-    <div>
-      {/* <PageHeading text="hello  h1" /> */}
-      <h1>Trending today</h1>
-      <ul>
+    <div className={styles.main}>
+      <h1 className={styles.title}>Trending today</h1>
+      <ul className={styles.list_order}>
         {films.results &&
           films.results.map(film => (
             <li key={film.id}>
               <Link
+                className={styles.link}
                 to={{
                   pathname: `/movies/${film.id}`,
                   state: { from: location },
